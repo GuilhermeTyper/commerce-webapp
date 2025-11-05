@@ -35,17 +35,17 @@ export default function ProductsForSaleList () {
             "amount": 123.45,
             "installments": {
                 "number": 3,
-                "total": 41.15,
+                "total": 461.15,
                 "hasFee": true
             }
         },
         {
             "id": 2,
             "title": "Caneca de Tulipa",
-            "amount": 123.45,
+            "amount": 789.45,
             "installments": {
-                "number": 3,
-                "total": 41.15,
+                "number": 6,
+                "total": 46.15,
                 "hasFee": false
             },
         }
