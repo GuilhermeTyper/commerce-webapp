@@ -1,5 +1,4 @@
-"use client";
-
+import { useState, useEffect } from 'react';
 function Installments (props) {
     const fees = props.installments.hasFee ? "com juros" : "sem juros";
     return (
@@ -28,36 +27,37 @@ function ProductListItem (props) {
 }
 
 export default function ProductsForSaleList () {
-    const json_products = [
-        {
-            "id": 1,
-            "title": "Caneca Personalizada de Porcelana",
-            "amount": 123.45,
-            "installments": {
-                "number": 3,
-                "total": 461.15,
-                "hasFee": true
-            }
-        },
-        {
-            "id": 2,
-            "title": "Caneca de Tulipa",
-            "amount": 789.45,
-            "installments": {
-                "number": 6,
-                "total": 46.15,
-                "hasFee": false
-            },
-        }
-    ];
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [products, setProducts] = useState([]);
 
-    const products = json_products.map((x, index) =>
-        <ProductListItem product={x} key={index} />
-    );
-    
-    return (
-        <div>
-            {products}
-        </div>
-    );
+    useEffect(() => {
+        fetch("http://127.0.0.1:5000/products")
+            .then((resp) => resp.json())
+            .then(
+                (json) => {
+                    setIsLoaded(true);
+                    setProducts(json);
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            );
+    }, []);
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+        return <div>Loading...</div>;
+    } else {
+        const p = products.map((x, index) => (
+            <ProductListItem product={x} key={index} />
+        ));
+        return (
+            <div>
+                {p}
+            </div>
+        );
+    }
 }
