@@ -33,9 +33,16 @@ export default function ProductsForSaleList () {
 
     useEffect(() => {
         fetch("http://127.0.0.1:5000/products")
-            .then((resp) => resp.json())
+            .then((resp) => {
+                console.log('resposta Bruta',resp);
+                if (!resp.ok) {
+                    throw new Error('A resposta da rede não foi ok ' + resp.statusText);
+                }
+                return resp.json();
+            })
             .then(
                 (json) => {
+                    console.log('dados recebidos',json);
                     setIsLoaded(true);
                     setProducts(json);
                 },
@@ -51,8 +58,8 @@ export default function ProductsForSaleList () {
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        const p = products.map((x, index) => (
-            <ProductListItem product={x} key={index} />
+        const p = products.map((x) => (
+            <ProductListItem product={x} key={x.id} />
         ));
         return (
             <div>
